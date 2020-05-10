@@ -134,29 +134,6 @@ module.exports.Class = class App {
 
          // ----------
 
-         /*
-         else if ((key == 'r') || (key == 'R')) {
-
-            let data = self.readData();
-
-            ansi.setCursorPosition(0,60);
-            ansi.writeText('R: ');
-            ansi.writeText(format.toHex(data, 2));
-      
-         }
-
-         else if ((key == 'w') || (key == 'W')) {
-
-            self.dataValue 
-            self.writeData(self.dataValue);
-            ansi.setCursorPosition(0,60);
-            ansi.writeText('W: ');
-            ansi.writeText(format.toHex(self.dataValue, 2));
-            self.dataValue++;
-      
-         }
-         */
-
          // 'Q' Quit
          else if (key == '\u0071') {
             process.exit();
@@ -342,7 +319,7 @@ module.exports.Class = class App {
    //
    parkCursor() {
 
-      this.ansi.setCursorPosition(22, 71);
+      this.ansi.setCursorPosition(23, 74);
 
    }
 
@@ -375,7 +352,8 @@ module.exports.Class = class App {
 
       ansi.setAttribute(Ansi.TextAttribute.Clear);
       ansi.setForeground(Ansi.Foreground.BrightWhite);
-      ansi.writeText('........ ........ = $' + format.toHex(this.currentAddress, 4));
+
+      ansi.writeText(format.toBin(this.currentAddress, 16) + ' = $' + format.toHex(this.currentAddress, 4));
       
       this.parkCursor();
       ansi.showCursor();
@@ -391,7 +369,7 @@ module.exports.Class = class App {
       let ansi = this.ansi;
       ansi.hideCursor();
 
-      ansi.setCursorPosition(3, 54);
+      ansi.setCursorPosition(3, 57);
 
       ansi.setAttribute(Ansi.TextAttribute.Clear);
       ansi.setForeground(Ansi.Foreground.BrightWhite);
@@ -402,7 +380,7 @@ module.exports.Class = class App {
          ansi.writeText('STEPPING = ');
       }
 
-      ansi.setCursorPosition(3, 65);
+      ansi.setCursorPosition(3, 68);
 
       let pin = this.clockGpio;
       if (pin.readSync() === 0) {
@@ -426,13 +404,13 @@ module.exports.Class = class App {
       let format = this.format;
 
       ansi.hideCursor();
-      ansi.setCursorPosition(3, 34);
+      ansi.setCursorPosition(3, 35);
 
       ansi.setAttribute(Ansi.TextAttribute.Clear);
       ansi.setForeground(Ansi.Foreground.BrightWhite);
       
       let state = (this.currentDataRW == 0) ? 'W ' : 'R ';
-      ansi.writeText(state + '........ = $' + format.toHex(this.currentData, 2));
+      ansi.writeText(state + format.toBin(this.currentData, 8) + ' = $' + format.toHex(this.currentData, 2));
 
       this.parkCursor();
       ansi.showCursor();
@@ -472,22 +450,27 @@ module.exports.Class = class App {
       ansi.setCursorPosition(1, 0);      
       ansi.setAttribute(Ansi.TextAttribute.Clear);
       ansi.setForeground(Ansi.Foreground.Cyan);
-      ansi.writeLine('╔════════════════════════════════════════════════════════════════════════╗');
-      ansi.writeLine('║                                                                        ║');
-      ansi.writeLine('║                                                                        ║');
-      ansi.writeLine('╚════════════════════════════════════════════════════════════════════════╝');
+      ansi.writeLine('╔══════════════════════════════════════════════════════════════════════════╗');
+      ansi.writeLine('║                                                                          ║');
+      ansi.writeLine('║                                                                          ║');
+      ansi.writeLine('╚══════════════════════════════════════════════════════════════════════════╝');
 
-      ansi.setCursorPosition(21, 0);
+      ansi.setCursorPosition(21, 1);
       ansi.setAttribute(Ansi.TextAttribute.Clear);
       ansi.setForeground(Ansi.Foreground.Cyan);
-      ansi.writeLine('╔════════════════════════════════════════════════════════════════════════╗');
-      ansi.writeLine('║                                                                        ║');
-      ansi.writeLine('╚════════════════════════════════════════════════════════════════════════╝');
+      ansi.writeLine('══════════════════════════════════════════════════════════════════════════');
 
-      ansi.setCursorPosition(0, 0);
+      ansi.setCursorPosition(0, 2);
       ansi.setAttribute(Ansi.TextAttribute.Clear);
+      ansi.setAttribute(Ansi.TextAttribute.Bold);
       ansi.setForeground(Ansi.Foreground.BrightYellow);
-      ansi.writeLine('  The Ramulator');
+      ansi.writeLine('The RAMulator v1.0');
+
+      ansi.setCursorPosition(0, 43);
+      ansi.setAttribute(Ansi.TextAttribute.Clear);
+      ansi.setAttribute(Ansi.TextAttribute.Bold);
+      ansi.setForeground(Ansi.Foreground.BrightYellow);
+      ansi.writeLine('a W65C02S RAM emulator for RPi3');
 
       ansi.setCursorPosition(2, 4);
       ansi.setAttribute(Ansi.TextAttribute.Clear);
@@ -499,18 +482,39 @@ module.exports.Class = class App {
       ansi.setAttribute(Ansi.TextAttribute.Clear);
       ansi.setAttribute(Ansi.TextAttribute.Underscore);
       ansi.setForeground(Ansi.Foreground.Cyan);
-      ansi.writeText('      DATA      ');
+      ansi.writeText('       DATA       ');
 
-      ansi.setCursorPosition(2, 53);
+      ansi.setCursorPosition(2, 55);
       ansi.setAttribute(Ansi.TextAttribute.Clear);
       ansi.setAttribute(Ansi.TextAttribute.Underscore);
       ansi.setForeground(Ansi.Foreground.Cyan);
       ansi.writeText('      CLOCK      ');
 
-      ansi.setCursorPosition(22, 5);
+      ansi.setCursorPosition(22, 4);
       ansi.setAttribute(Ansi.TextAttribute.Clear);
       ansi.setForeground(Ansi.Foreground.Green);
-      ansi.writeText('R = RESET   S = START/STOP CLOCK   SPC = SINGLE STEP   Q = QUIT');
+      ansi.writeText('S  Start/Stop Clock     +/-  Adjust Clock Speed     SPC  Single Step');
+
+      ansi.setAttribute(Ansi.TextAttribute.Bold);
+      ansi.setCursorPosition(22, 4);
+      ansi.writeText('S');
+      ansi.setCursorPosition(22, 28);
+      ansi.writeText('+/-');
+      ansi.setCursorPosition(22, 56);
+      ansi.writeText('SPC');
+
+      ansi.setCursorPosition(23, 4);
+      ansi.setAttribute(Ansi.TextAttribute.Clear);
+      ansi.setForeground(Ansi.Foreground.Green);
+      ansi.writeText('UP/DOWN  Memory Page    LEFT/RIGHT  Memory Block    Q  Quit');
+
+      ansi.setAttribute(Ansi.TextAttribute.Bold);
+      ansi.setCursorPosition(23, 4);
+      ansi.writeText('UP/DOWN');
+      ansi.setCursorPosition(23, 28);
+      ansi.writeText('LEFT/RIGHT');
+      ansi.setCursorPosition(23, 56);
+      ansi.writeText('Q');
 
       this.parkCursor();
       ansi.showCursor();

@@ -142,7 +142,7 @@ module.exports.Class = class Ram {
 
       for (; a<e; a+=16) {
 
-         ansi.writeText('  ' + format.toHex(a,4) + ': ');
+         ansi.writeText('   ' + format.toHex(a,4) + ': ');
 
          for (let i=a; i<a+16; i++) {
             ansi.writeText(format.toHex(ram[i],2) + ' ');

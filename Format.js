@@ -1,16 +1,28 @@
 module.exports.Class = class Format {
 
    //
+   // toBin
    //
-   //
-   toHex(value, digits) {
-      let hex = '00000000' + value.toString(16).toUpperCase();
-      return hex.slice(0-digits);
+   toBin(value, digits) {
+      let bin = '0000000000000000' + (value >>> 0).toString(2);
+      //let binString = hex.slice(0 - digits);
+      let binString = bin.slice(0 - digits).replace(/\B(?=(\d{8})+(?!\d))/g, " ");
+      return binString;
    }
 
 
    //
+   // toHex
    //
+   toHex(value, digits) {
+      let hex = '0000000000000000' + value.toString(16).toUpperCase();
+      let hexString = hex.slice(0 - digits);
+      return hexString;
+   }
+
+
+   //
+   // toUnicode
    //
    toUnicode(theString) {
 
